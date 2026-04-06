@@ -1,11 +1,34 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Target, TrendingUp, Zap, AlertCircle } from 'lucide-react';
-import { summaryData } from '../data/mockData';
+import { useAppContext } from '../context/AppContext';
 
 const Insights: React.FC = () => {
-  const { totalExpenses, totalIncome, categorySpending } = summaryData;
-  const savingsRate = (((totalIncome - totalExpenses) / totalIncome) * 100).toFixed(1);
-  const highestCategory = categorySpending.reduce((prev, current) => (prev.value > current.value) ? prev : current);
+  const { transactions } = useAppContext();
+
+  const { totalIncome, totalExpenses, categorySpending } = useMemo(() => {
+    let income = 0;
+    let expenses = 0;
+    const categories: Record<string, number> = {};
+
+    transactions.forEach(t => {
+      if (t.type === 'income') {
+        income += t.amount;
+      } else {
+        expenses += t.amount;
+        categories[t.category] = (categories[t.category] || 0) + t.amount;
+      }
+    });
+
+    const formattedCategories = Object.keys(categories).map(key => ({
+      name: key,
+      value: categories[key],
+    })).sort((a, b) => b.value - a.value);
+
+    return { totalIncome: income, totalExpenses: expenses, categorySpending: formattedCategories };
+  }, [transactions]);
+
+  const savingsRate = totalIncome > 0 ? (((totalIncome - totalExpenses) / totalIncome) * 100).toFixed(1) : '0.0';
+  const highestCategory = categorySpending.length > 0 ? categorySpending[0] : { name: 'None', value: 0 };
 
   const InsightCard = ({ icon: Icon, title, description, color }: any) => (
     <div className="glass p-6 card-hover animate flex gap-5 items-start">

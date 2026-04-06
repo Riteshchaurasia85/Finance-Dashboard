@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Sidebar from './components/Sidebar'
 import DashboardOverview from './components/DashboardOverview'
 import TransactionsList from './components/TransactionsList'
 import Insights from './components/Insights'
 import { AppProvider } from './context/AppContext'
-import { Bell, User, Menu, X } from 'lucide-react'
+import { Bell, User, Menu } from 'lucide-react'
 import AuthModal from './components/AuthModal'
 
 const App = () => {
@@ -30,20 +30,20 @@ const App = () => {
     <AppProvider>
       <div className="flex bg-bg-primary text-text-primary min-h-screen overflow-hidden">
         {/* Sidebar for Desktop & Mobile */}
-        <div 
+        <div
           className={`fixed inset-0 z-40 lg:relative lg:block ${isMobileMenuOpen ? 'flex' : 'hidden'} lg:flex`}
         >
           {/* Overlay for mobile */}
-          <div 
+          <div
             className="fixed inset-0 bg-bg-primary/60 backdrop-blur-sm lg:hidden"
             onClick={() => setIsMobileMenuOpen(false)}
           />
-          
+
           <div className="relative z-50 h-full">
-            <Sidebar 
-              activeTab={activeTab} 
-              setActiveTab={closeMobileMenu} 
-              openAuthPage={() => setIsAuthModalOpen(true)} 
+            <Sidebar
+              activeTab={activeTab}
+              setActiveTab={closeMobileMenu}
+              openAuthPage={() => setIsAuthModalOpen(true)}
             />
           </div>
         </div>
@@ -51,7 +51,7 @@ const App = () => {
         <main className="flex-1 overflow-y-auto px-4 py-6 md:px-10 md:py-8">
           <header className="flex justify-between items-center mb-6 md:mb-10 sticky top-0 bg-bg-primary/80 backdrop-blur-md z-30 py-4 border-b border-border-color">
             <div className="flex items-center gap-4">
-              <button 
+              <button
                 onClick={() => setIsMobileMenuOpen(true)}
                 className="p-2 lg:hidden border border-border-color rounded-lg text-text-secondary hover:text-accent-primary transition-colors cursor-pointer flex items-center justify-center"
               >
@@ -79,10 +79,10 @@ const App = () => {
             {renderContent()}
           </div>
         </main>
-        
-        <AuthModal 
-          isOpen={isAuthModalOpen} 
-          onClose={() => setIsAuthModalOpen(false)} 
+
+        <AuthModal
+          isOpen={isAuthModalOpen}
+          onClose={() => setIsAuthModalOpen(false)}
         />
       </div>
     </AppProvider>

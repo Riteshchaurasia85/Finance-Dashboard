@@ -1,10 +1,54 @@
-import React from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import React, { useMemo } from 'react';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { TrendingUp, TrendingDown, IndianRupee, Wallet, CreditCard } from 'lucide-react';
-import { summaryData } from '../data/mockData';
+import { useAppContext } from '../context/AppContext';
 
 const DashboardOverview: React.FC = () => {
-  const { totalBalance, totalIncome, totalExpenses, balanceTrend, categorySpending } = summaryData;
+  const { transactions } = useAppContext();
+
+  const { totalIncome, totalExpenses, categorySpending } = useMemo(() => {
+    let income = 0;
+    let expenses = 0;
+    const categories: Record<string, number> = {};
+
+    transactions.forEach(t => {
+      if (t.type === 'income') {
+        income += t.amount;
+      } else {
+        expenses += t.amount;
+        categories[t.category] = (categories[t.category] || 0) + t.amount;
+      }
+    });
+
+    const categoryColors: Record<string, string> = {
+      'Rent': 'var(--accent-secondary)',
+      'Food': 'var(--accent-primary)',
+      'Shopping': 'var(--text-primary)',
+      'Transport': 'var(--text-secondary)',
+      'Entertainment': 'var(--warning)',
+      'Investment': 'var(--success)',
+      'Salary': 'var(--accent-primary)'
+    };
+
+    const formattedCategories = Object.keys(categories).map(key => ({
+      name: key,
+      value: categories[key],
+      color: categoryColors[key] || 'var(--text-secondary)'
+    })).sort((a, b) => b.value - a.value); // Sort to show biggest spending first
+
+    return { totalIncome: income, totalExpenses: expenses, categorySpending: formattedCategories };
+  }, [transactions]);
+
+  const totalBalance = totalIncome - totalExpenses;
+
+  // Simplified balance trend based on current total mapping to last 3 months
+  const balanceTrend = useMemo(() => {
+    return [
+      { name: 'Prev', balance: Math.max(0, totalBalance * 0.6) },
+      { name: 'Recent', balance: Math.max(0, totalBalance * 0.85) },
+      { name: 'Now', balance: totalBalance },
+    ];
+  }, [totalBalance]);
 
   const StatCard = ({ title, value, icon: Icon, color, trend }: any) => (
     <div className="glass p-4 md:p-6 card-hover flex flex-col gap-3 animate w-full">

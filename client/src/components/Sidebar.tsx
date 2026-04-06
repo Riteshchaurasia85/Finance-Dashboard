@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { LayoutDashboard, ReceiptText, PieChart, Settings, LogOut, X, ChevronLeft, ChevronRight, UserPlus, Shield } from 'lucide-react';
+import { LayoutDashboard, ReceiptText, PieChart, X, ChevronLeft, ChevronRight, UserPlus, Shield } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 
 interface SidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
-  openAuthPage: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, openAuthPage }) => {
+const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isRoleDropdownOpen, setIsRoleDropdownOpen] = useState(false);
   const { role, setRole } = useAppContext();

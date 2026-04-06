@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Filter, Trash2, Edit3, ArrowUpCircle, ArrowDownCircle, Plus, X } from 'lucide-react';
+import { Search, Trash2, Edit3, ArrowUpCircle, ArrowDownCircle, Plus, X } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { type Transaction } from '../data/mockData';
 
