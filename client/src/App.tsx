@@ -43,7 +43,6 @@ const App = () => {
             <Sidebar
               activeTab={activeTab}
               setActiveTab={closeMobileMenu}
-              openAuthPage={() => setIsAuthModalOpen(true)}
             />
           </div>
         </div>
