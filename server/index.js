@@ -10,7 +10,13 @@ connectDB();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:5173', 
+    'https://finance-dashboard-client-2dy0.onrender.com'
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 // Mock Data (In-memory for demonstration if Mongo isn't connected)
